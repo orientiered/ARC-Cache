@@ -11,7 +11,7 @@ SET(WARNING_FLAGS "-Wextra -Weffc++ -Waggressive-loop-optimizations -Wmissing-de
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${ASAN_FLAGS} ${WARNING_FLAGS}")
 
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 
 add_executable(arc source/main.cpp)
 
