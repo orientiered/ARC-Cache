@@ -13,5 +13,18 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${ASAN_FLAGS} ${WARNING_FLAG
 
 set(CMAKE_BUILD_TYPE Release)
 
+configure_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/arc${CMAKE_EXECUTABLE_SUFFIX}
+    ${CMAKE_CURRENT_SOURCE_DIR}/arc${CMAKE_EXECUTABLE_SUFFIX}
+    COPYONLY
+)
+
+configure_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/testgen${CMAKE_EXECUTABLE_SUFFIX}
+    ${CMAKE_CURRENT_SOURCE_DIR}/testgen${CMAKE_EXECUTABLE_SUFFIX}
+    COPYONLY
+)
+
 add_executable(arc source/main.cpp)
+add_executable(testgen source/test_gen.cpp)
 
