@@ -18,18 +18,6 @@ set(CMAKE_BUILD_TYPE Release)
 add_executable(arc source/main.cpp)
 add_executable(testgen source/test_gen.cpp)
 
-configure_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/arc${CMAKE_EXECUTABLE_SUFFIX}
-    ${CMAKE_CURRENT_SOURCE_DIR}/arc${CMAKE_EXECUTABLE_SUFFIX}
-    COPYONLY
-)
-
-configure_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/testgen${CMAKE_EXECUTABLE_SUFFIX}
-    ${CMAKE_CURRENT_SOURCE_DIR}/testgen${CMAKE_EXECUTABLE_SUFFIX}
-    COPYONLY
-)
-
 SET(TESTS_DIR ${CMAKE_SOURCE_DIR}/tests)
 file(GLOB testFiles ${TESTS_DIR}/*.dat)
 

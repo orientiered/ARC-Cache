@@ -1,7 +1,9 @@
 #include <iostream>
-#include <stdlib.h>
 #include <string.h>
+
 #include "arc.hpp"
+#include "lru.hpp"
+#include "ideal.hpp"
 
 
 const int BAD_INPUT_EXIT = 2;
@@ -39,8 +41,8 @@ int main(int argc, const char *argv[]) {
     }
 
     if (verbose) {
-        std::cout << "ARC hits: " << arc.get_hits() << " out of " << elements_count << " requests \n";
-        std::cout << "LRU hits: " << lru.hits_ << " out of " << elements_count << " requests \n";
+        std::cout << "ARC hits:   " << arc.get_hits()   << " out of " << elements_count << " requests \n";
+        std::cout << "LRU hits:   " << lru.get_hits()   << " out of " << elements_count << " requests \n";
         std::cout << "Ideal hits: " << ideal.get_hits() << " out of " << elements_count << " requests \n";
     } else {
         std::cout << arc.get_hits() << "\n";
