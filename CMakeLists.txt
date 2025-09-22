@@ -16,6 +16,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${ASAN_FLAGS} ${WARNING_FLAG
 set(CMAKE_BUILD_TYPE Release)
 
 add_executable(arc source/main.cpp)
+add_executable(ideal source/ideal.cpp)
 add_executable(testgen source/test_gen.cpp)
 
 SET(TESTS_DIR ${CMAKE_SOURCE_DIR}/tests)
