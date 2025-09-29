@@ -3,14 +3,12 @@
 #include <list>
 #include <unordered_map>
 
-using std::size_t;
-
 /// @file Header-only imlpementation of LRU cache algorithm
 
 template <typename T, typename KeyT = int>
 class LRUCache {
 public:
-  LRUCache(size_t sz) : sz_(sz) {}
+  LRUCache(std::size_t sz) : sz_(sz), cache_(), hash_() {}
 
   template <typename F> bool lookup_update(KeyT key, F slow_get_page) {
     auto hit = hash_.find(key);
@@ -30,11 +28,11 @@ public:
     return true;
   }
 
-    size_t get_hits() const { return hits_; }
+    std::size_t get_hits() const { return hits_; }
 private:
-  size_t sz_;
+  std::size_t sz_;
   std::list<std::pair<KeyT, T>> cache_;
-  size_t hits_;
+  std::size_t hits_ = 0;
 
   using ListIt = typename std::list<std::pair<KeyT, T>>::iterator;
   std::unordered_map<KeyT, ListIt> hash_;

@@ -6,7 +6,6 @@
 
 /// @file Header-only imlpementation of ARC
 
-using std::size_t;
 /**
  * @brief Adaptive replacement cache
  *
@@ -50,7 +49,7 @@ class ARCCache {
         dst.splice(dst.begin(), src, elem);
     }
 public:
-    ARCCache(size_t size): sz_(size), T1(), T2(), B1(), B2(), cache_(), htable_() {}
+    ARCCache(size_t size): sz_(size), cache_(), B1(), B2(), T1(), T2(), htable_() {}
 
     size_t get_hits()     const { return cache_hits_;     }
     size_t get_requests() const { return cache_accesses_; }
@@ -73,8 +72,13 @@ void ARCCache<TPage, TKey>::delete_LRU(std::list<TKey>& list, bool remove_from_c
 
 template<typename TPage, typename TKey>
 void ARCCache<TPage, TKey>::replace(TKey key) {
-    bool key_in_B2 = (htable_.contains(key)) ? htable_[key].list == LB2 : false;
-    if (!T1.empty() && (T1.size() > p || T1.size() == p && key_in_B2)) {
+    bool key_in_B2 = false;
+    {
+        auto it = htable_.find(key);
+        if (it != htable_.end() && it->second.list == LB2) key_in_B2 = true;
+    }
+
+    if (!T1.empty() && (T1.size() > p || (T1.size() == p && key_in_B2) )) {
         TKey key_to_delete = T1.back();
         move_to_MRU(B1, T1, std::prev(T1.end()));
         cache_.erase(key_to_delete);
