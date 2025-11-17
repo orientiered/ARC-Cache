@@ -15,13 +15,13 @@
  */
 template<typename TPage, typename TKey>
 class ARCCache {
-    size_t sz_; ///< maximum number of cache pages
-    size_t cache_hits_ = 0;
-    size_t cache_accesses_ = 0;
+    std::size_t sz_; ///< maximum number of cache pages
+    std::size_t cache_hits_ = 0;
+    std::size_t cache_accesses_ = 0;
 
     std::unordered_map<TKey, TPage> cache_; ///< hash table with cached pages
     std::list<TKey> B1, B2, T1, T2;         ///< lists for ARC algorithm
-    size_t p = 0;                           ///< Preffered size of T1, being changed during runtime
+    std::size_t p = 0;                           ///< Preffered size of T1, being changed during runtime
 
     enum ARCList {  ///< ARC list names enum
         LNone = 0,
@@ -49,10 +49,10 @@ class ARCCache {
         dst.splice(dst.begin(), src, elem);
     }
 public:
-    ARCCache(size_t size): sz_(size), cache_(), B1(), B2(), T1(), T2(), htable_() {}
+    ARCCache(std::size_t size): sz_(size), cache_(), B1(), B2(), T1(), T2(), htable_() {}
 
-    size_t get_hits()     const { return cache_hits_;     }
-    size_t get_requests() const { return cache_accesses_; }
+    std::size_t get_hits()     const { return cache_hits_;     }
+    std::size_t get_requests() const { return cache_accesses_; }
 
     template <typename F>
     TPage lookup_update(TKey key, F slow_get_page);
@@ -67,7 +67,6 @@ void ARCCache<TPage, TKey>::delete_LRU(std::list<TKey>& list, bool remove_from_c
     if (remove_from_cache) {
         cache_.erase(key_to_delete);
     }
-    // std::cout << "Deleted LRU " << key_to_delete << "\n";
 }
 
 template<typename TPage, typename TKey>
@@ -119,7 +118,7 @@ TPage ARCCache<TPage, TKey>::lookup_update(TKey key, F slow_get_page) {
             case LB1:
             {
                 // adaptation
-                size_t delta = B1.size() >= B2.size() ? 1 : B2.size() / B1.size();
+                std::size_t delta = B1.size() >= B2.size() ? 1 : B2.size() / B1.size();
                 p = std::min(sz_, p + delta);
                 // replace
                 replace(key);
@@ -133,8 +132,8 @@ TPage ARCCache<TPage, TKey>::lookup_update(TKey key, F slow_get_page) {
             case LB2:
             {
                 // adaptation
-                size_t delta = B2.size() >= B1.size() ? 1 : B1.size() / B2.size();
-                p = std::max((size_t)0, p - delta);
+                std::size_t delta = B2.size() >= B1.size() ? 1 : B1.size() / B2.size();
+                p = std::max((std::size_t)0, p - delta);
                 // replace
                 replace(key);
                 // moving key from B2 to MRU in T2
@@ -146,13 +145,13 @@ TPage ARCCache<TPage, TKey>::lookup_update(TKey key, F slow_get_page) {
                 break;
             case LNone:
             default:
-                std::cout << "Found page without list\n" << key;
-                exit(2);
+                std::cerr << "Found page without list\n" << key;
+                throw std::logic_error("Encountered page without associated list in cache");
                 break;
         }
     } else {
     // ----------------- Key not found in B1, B2, T1 or T2 - miss ---------------------------
-        size_t full_size = T1.size() + T2.size() + B1.size() + B2.size();
+        std::size_t full_size = T1.size() + T2.size() + B1.size() + B2.size();
         // case A
         if (T1.size() + B1.size() == sz_) {
             if (T1.size() < sz_) {

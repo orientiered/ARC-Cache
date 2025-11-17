@@ -1,23 +1,21 @@
 #include <iostream>
 
 #include "ideal.hpp"
+#include "input.hpp"
 
-const int BAD_INPUT_EXIT = 2;
+int main() {
 
-int main(int argc, const char *argv[]) {
+    unsigned cache_size = 0, elements_count = 0;
 
-    int cache_size = 0, elements_count = 0;
-    std::cin >> cache_size >> elements_count;
-
-    if (cache_size <= 0 || elements_count < 0) {
-        std::cout << "Invalid cache size or number of elements\n";
-        return BAD_INPUT_EXIT;
+    if (read_input_header(cache_size, elements_count)) {
+        return EXIT_FAILURE;
     }
 
     IdealCache<int> ideal((size_t)cache_size);
-    for (int elem_idx = 0; elem_idx < elements_count; elem_idx++) {
+    for (unsigned elem_idx = 0; elem_idx < elements_count; elem_idx++) {
         int page_idx = -1;
         std::cin >> page_idx;
+        check_cin("Invalid page idx\n");
         ideal.lookup_update(page_idx);
     }
 
