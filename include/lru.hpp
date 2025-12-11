@@ -5,8 +5,10 @@
 
 /// @file Header-only imlpementation of LRU cache algorithm
 
+namespace Caches {
+
 template <typename T, typename KeyT = int>
-class LRUCache {
+class LRUCache final {
 public:
   LRUCache(std::size_t sz) : sz_(sz), cache_(), hash_() {}
 
@@ -39,3 +41,6 @@ private:
 
   bool full() const { return (cache_.size() == sz_); }
 };
+
+} // namespace Caches
+

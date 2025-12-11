@@ -1,11 +1,14 @@
 #include <iostream>
+#include <stdexcept>
 
 #include "input.hpp"
 
+namespace Caches {
+
 void check_cin(const std::string err_msg) {
-    if (std::cin.bad()) {
+    if (std::cin.fail()) {
         std::cerr << err_msg;
-        exit(EXIT_FAILURE);
+        throw cin_error("Error when reading from console");
     }
     return;
 }
@@ -33,3 +36,5 @@ int read_input_header(unsigned &cache_size, unsigned &elements_count) {
 
     return 0;
 }
+
+} // namespace Caches

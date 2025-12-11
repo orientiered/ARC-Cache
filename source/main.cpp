@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 #include <string.h>
 
 #include "arc.hpp"
@@ -18,21 +19,27 @@ int main(int argc, const char *argv[]) {
     }
 
     unsigned cache_size = 0, elements_count = 0;
-    if (read_input_header(cache_size, elements_count)) {
+
+    try {
+        if (Caches::read_input_header(cache_size, elements_count)) {
+            return EXIT_FAILURE;
+        }
+    } catch (const Caches::cin_error& err) {
+        std::cerr << err.what() << "\n";
         return EXIT_FAILURE;
     }
 
     using TKey = int;
 
-    IdealCache<TKey> ideal((size_t)cache_size);
-    ARCCache<int, TKey> arc((size_t)cache_size);
-    LRUCache<int, TKey> lru((size_t)cache_size);
+    Caches::IdealCache<TKey> ideal((size_t)cache_size);
+    Caches::ARCCache<int, TKey> arc((size_t)cache_size);
+    Caches::LRUCache<int, TKey> lru((size_t)cache_size);
 
     try {
         for (unsigned elem_idx = 0; elem_idx < elements_count; elem_idx++) {
             TKey page_idx{};
             std::cin >> page_idx;
-            check_cin("Failed to read page index\n");
+            Caches::check_cin("Failed to read page index\n");
 
             arc.lookup_update(page_idx, get_page_plug);
             if (verbose) {
@@ -41,6 +48,9 @@ int main(int argc, const char *argv[]) {
             }
         }
     } catch (const std::logic_error& err) {
+        std::cerr << err.what() << "\n";
+        return EXIT_FAILURE;
+    } catch (const Caches::cin_error& err) {
         std::cerr << err.what() << "\n";
         return EXIT_FAILURE;
     }

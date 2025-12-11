@@ -13,8 +13,11 @@
  * @tparam TKey key that is used to address cache pages (usually int or string)
  * algo source: https://www2.cs.uh.edu/~paris/7360/PAPERS03/arcfast.pdf
  */
+
+namespace Caches {
+
 template<typename TPage, typename TKey>
-class ARCCache {
+class ARCCache final {
     std::size_t sz_; ///< maximum number of cache pages
     std::size_t cache_hits_ = 0;
     std::size_t cache_accesses_ = 0;
@@ -174,3 +177,5 @@ TPage ARCCache<TPage, TKey>::lookup_update(TKey key, F slow_get_page) {
     }
     return cache_[key];
 }
+
+} // namespace Caches

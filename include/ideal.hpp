@@ -15,8 +15,11 @@
  * Simulates ideal cache where future is known beforehand
  * Replacement policy: remove page that will be requested later than others
  */
+
+namespace Caches {
+
 template<typename TKey>
-class IdealCache {
+class IdealCache final {
 public:
     IdealCache(std::size_t cache_size): requests(), sz_(cache_size) {}
 
@@ -24,6 +27,8 @@ public:
         requests.push_back(key);
     }
 
+    //! This function is not O(1) ---
+    //! It will recalculate optimal cache hits on every call
     std::size_t get_hits() const;
 private:
     std::vector<TKey> requests;
@@ -95,3 +100,5 @@ std::size_t IdealCache<TKey>::get_hits() const {
 
     return hits;
 }
+
+} // namespace Caches
